@@ -1,0 +1,12 @@
+<?php 
+// Using filter_input function to get array for item_list.
+// Using default filter to not do any additional processing.
+// Using FILTER_REQUIRE_ARRAY parameter to return an array.
+
+$item_list = filter_input(INPUT_POST, 'item_list', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
+// initializing $item_list with empty array.
+
+if ($item_list === NULL) {
+$item_list = array(); 
+} 
