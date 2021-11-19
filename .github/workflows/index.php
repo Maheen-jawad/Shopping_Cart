@@ -49,7 +49,7 @@ $item_to_modify = $item_list[$modify_item]; }
 if($item_list < 2) {
 $errors[] = 'List cannot be sorted'; }
 else {
-rsort($item_list);
+sort($item_list);
 }
 }
 	include("item_list.php");
