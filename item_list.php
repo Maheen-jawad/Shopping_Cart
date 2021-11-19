@@ -1,76 +1,96 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Shopping List Manager</title>
     <link rel="stylesheet" type="text/css" href="main.css">
 </head>
-
 <body>
-    <main class="center border">
+    <header>
         <h1>Shopping List Manager</h1>
-        
-        <div>
-           <h2>Items:</h2>
-        <?php if (count($item_list) == 0) : ?>
-            <p>There are no items in the shopping list.</p>
-        <?php else: ?>
-            <ul>
-            <?php foreach( $item_list as $id => $item ) : ?>
-                <li><?php print_r($id + 1 . '. ' . $item); ?></li>
+    </header>
+	<main>
+	
+        <!--error message--!>
+	<?php if(count($errors) > 0):?>
+	<h2> errors: </h2>
+	<ul>
+	<?php foreach($errors as $error):?>
+	<li><?php echo $error;?></li>
+	<?php endforeach;?>
+	</ul>
+	<?php endif; ?>
+	
+        <!-- Items list--!>
+	<h2> Items: </h2>
+	<?php if($item_list == NULL):?>
+	<p>Shopping list is empty.</p>
+	<?php else:?>
+	<ul>
+	<?php foreach($item_list as $item => $name):?>
+	<li> <?php echo $item+1 . ' . ' .$name;?></li>
+	<?php endforeach;?>
+	</ul>
+	<?php endif;?>
+	<br>
+	
+        <!-- Adding items --!>
+	<h2>Add Item:</h2>
+	<form action="." method="post">
+	<?php foreach ($item_list as $name):?>
+	<input type="hidden" name="item_list[]" value="<?php echo $name;?>">
+	<?php endforeach;?>
+	<label>Items:</label>
+	<input type="text" name="new" id="new"><br>
+	<label>&nbsp;</label>
+	<input type="submit" name="action" value="Add item">
+	</form>
+	<br>
+	
+         <!--Select Form--!>
+	 <?php if (count($item_list) > 0 && empty($item_to_modify)) : ?>
+        <h2>Select Item:</h2>
+        <form action="." method="post">
+            <?php foreach( $item_list as $name ) : ?>
+              <input type="hidden" name="item_list[]" value="<?php echo $name; ?>">
             <?php endforeach; ?>
-            </ul>           
+            <label>Item:</label>
+            <select name="itemid">
+                <?php foreach( $item_list as $id => $name ) : ?>
+                    <option value="<?php echo $id; ?>">
+                        <?php echo $name; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <br>
+            <label>&nbsp;</label>      
+            <input type="submit" name="action" value="Delete item">
+			<input type="submit" name="action" value="Modify item">
+ <br><br>
+ 
+            <label>&nbsp;</label>
+            <input type="submit" name="action" value="sort items">
+        </form>
         <?php endif; ?>
-        <br>
-        </div>
-        <div>
-            <h6>Add item: </h6>
-            <div>
-                <form action="<?=$_SERVER['PHP_SELF'];?>" method="post">
-                   <?php foreach( $item_list as $item ) : ?>
+
+<!--Modify Form--!>
+<?php if (!empty($item_to_modify)) : ?>
+        <h2>Item to Modify:</h2>
+        <form action="." method="post">
+            <?php foreach( $item_list as $item ) : ?>
               <input type="hidden" name="item_list[]" value="<?php echo $item; ?>">
             <?php endforeach; ?>
             <label>Item:</label>
-            <input type="text" name="new_item" id="new_item"> <br>
+            <input type="hidden" name="item_to_modify" value="<?php echo $item_to_modify; ?>">
+            <input type="text" name="itemid" value="<?php echo $modify_item; ?>">
             <label>&nbsp;</label>
-            <input type="submit" name="action" value="Add Item">
-                </form>
-            </div>
-        </div>
-        <?php if(!$modify_list) : ?>
-        <div class="" id="selectItem">
-            <h6>Select item</h6>
-            <form action="<?=$_SERVER['PHP_SELF'];?>" method="post">
-                <span>Item: </span>
-                <select name="item" id="itemSelector">
-                    <?php foreach($items as $key=>$value):?>
-                  
-                    <option value="<?php echo $value['_id'] . '_' . $value['name'] ?>"><?php echo $value['name'] ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select><br>
-                <input type="submit" name="remove_item" value="Delete item" style="text-align: center;">
-                <input type="submit" name="modify_item" value="Modify item" style="text-align: center;">
-                <input type="hidden" name="modifyitem" value="true">
-            </form>
-        </div>
+            <input type="submit" name="action" value="Save Changes">
+            <input type="submit" name="action" value="Cancel Changes">
+        </form>
         <?php endif; ?>
-        <?php if($modify_list) : ?>
-        <div id="modifyItem">
-            <h6>Modify item</h6>
-            <form action="<?=$_SERVER['PHP_SELF'];?>" method="post">
-                <span>Product: </span>
-                <input type="text" id="modifyText" name="name" value="<?php echo $selected[1]?>">
-                <input type="hidden" id="modifyId" name="id" value="<?php echo $selected[0]?>">
-                <input type="hidden" name="modifyitem" value="false"><br>
-                <input type="submit" name="save_changes" value="Save Changes" style="text-align: center;">
-                <input type="submit" name="modify_item" value="Cancel Changes" style="text-align: center;">
-            </form>
-        </div>
-        <?php endif; ?>
-        <a href="?sort=true"><button type="button">Sort List</button></a>
-
-    </main>
+		
+		    </main>
 </body>
-
 </html>
+	</main>
+	</body>
+	</html>
